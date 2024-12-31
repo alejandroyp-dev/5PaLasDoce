@@ -50,8 +50,12 @@ function updateClocks(timeString) {
     document.getElementById('countdown').textContent = 
         `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
+    // Get current hour and minute
+    const currentHour = currentTime.getHours();
+    const currentMinute = currentTime.getMinutes();
+
     // Check if we reached 23:55
-    if (hours === 0 && minutes === 0 && seconds === 0) {
+    if (currentHour === 23 && currentMinute === 55) {
         // Redirect to YouTube video
         window.location.href = 'https://youtu.be/RgbFLWG5wOI?si=OWonlOESWYlO5-Lo';
     } else if (hours === 0 && minutes < 5) {
