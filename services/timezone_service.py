@@ -28,6 +28,8 @@ async def obtener_hora_actual(zone: str):
                 return data.get("formatted", "Could not get the time")
             except (KeyError, TypeError, ValueError) as e:
                 raise Exception(f"Error processing the response: {e}")
+            finally:
+                response.close()
         else:
             raise Exception(f"Error getting the time: {response.status}")
     """

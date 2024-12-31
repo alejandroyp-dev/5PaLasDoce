@@ -17,8 +17,6 @@ async def obtener_lista_paises():
     async with aiohttp.ClientSession() as session:
         response = await session.get(TIMEZONE_API_URL, params=params, timeout=15)
 
-        # print(response)
-
         if response.status == 200:
             try:
                 data = await response.json()
@@ -35,6 +33,8 @@ async def obtener_lista_paises():
                 return list(unique_countries)
             except (KeyError, TypeError, ValueError) as e:
                 raise Exception(f"Error processing the response: {e}")
+            finally:
+                response.close()
         else:
             raise Exception(f"Error getting countries: {response.status}")
 
