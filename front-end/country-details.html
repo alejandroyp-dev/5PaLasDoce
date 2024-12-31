@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Pa Las Doce - Detalles del País</title>
+    <link rel="stylesheet" href="css/country-details.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="back-button" onclick="window.history.back()">
+                ← Volver
+            </button>
+            <h1 class="country-name" id="countryName"></h1>
+        </header>
+
+        <div class="main-content">
+            <div class="flag-container">
+                <img id="countryFlag" class="country-flag" src="" alt="Bandera del país">
+            </div>
+
+            <div class="time-container">
+                <div class="digital-clock">
+                    <div class="time" id="digitalTime">00:00:00</div>
+                    <div class="date" id="currentDate">Fecha</div>
+                </div>
+                <div class="countdown">
+                    <div class="countdown-label">Tiempo hasta 5 pa' las 12:</div>
+                    <div class="countdown-time" id="countdown">00:00:00</div>
+                </div>
+            </div>
+
+            <div class="country-info">
+                <div class="info-card">
+                    <h3>Información del País</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Población:</label>
+                            <span id="population"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Región:</label>
+                            <span id="region"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Subregión:</label>
+                            <span id="subregion"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Moneda:</label>
+                            <span id="currency"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Zona Horaria:</label>
+                            <span id="timezone"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/country-details.js"></script>
+</body>
+</html>

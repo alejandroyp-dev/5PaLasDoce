@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Pa Las Doce</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1 class="main-title">5 Pa Las Doce</h1>
+        <p class="subtitle">V3.0</p>
+    </header>
+
+    <div class="clock-container">
+        <div class="clock">
+            <div class="clock-face">
+                <div class="hand hour-hand" id="hourHand"></div>
+                <div class="hand minute-hand" id="minuteHand"></div>
+                <div class="hand second-hand" id="secondHand"></div>
+                <div class="center-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="select-container">
+        <select class="material-select" id="countrySelect">
+            <option value="">Seleccione su país...</option>
+        </select>
+        <div id="loadingMessage" class="loading">Cargando países...</div>
+        <div id="errorMessage" class="error-message"></div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
