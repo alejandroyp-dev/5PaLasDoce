@@ -1,4 +1,4 @@
-const API_URL = 'https://lrws3dl5-8000.use2.devtunnels.ms'; // API URL: hardcoded for missing deployment
+const API_URL = 'https://lrws3dl5-8000.use2.devtunnels.ms';  // API URL: hardcoded for missing deployment
 let countryData = null;
 let timeInterval = null;
 let displayedSong = false;
@@ -41,7 +41,9 @@ function updateClocks(timeString) {
     if (currentTime >= target) {
         target.setDate(target.getDate() + 1);
     }
-    
+
+    const day = currentTime.getDate();
+
     const diff = target - currentTime;
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -50,6 +52,10 @@ function updateClocks(timeString) {
     // Update countdown
     document.getElementById('countdown').textContent = 
         `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    if (day !== 31) {
+        document.getElementById('countdown').textContent = `Happy new year! 🎉`;
+    }
 
     // Get current hour and minute
     const currentHour = currentTime.getHours();
