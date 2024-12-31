@@ -1,5 +1,5 @@
 // script.js
-const API_URL = 'https://lrws3dl5-8000.use2.devtunnels.ms'; // API URL: hardcoded for missing deployment
+const API_URL = 'https://1xrgj9gs-8000.use2.devtunnels.ms'; // API URL: hardcoded for missing deployment
 const countrySelect = document.getElementById('countrySelect');
 const loadingMessage = document.getElementById('loadingMessage');
 const errorMessage = document.getElementById('errorMessage');

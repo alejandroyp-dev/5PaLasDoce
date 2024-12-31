@@ -1,4 +1,4 @@
-const API_URL = 'https://lrws3dl5-8000.use2.devtunnels.ms';  // API URL: hardcoded for missing deployment
+const API_URL = 'https://1xrgj9gs-8000.use2.devtunnels.ms'; // API URL: hardcoded for missing deployment
 let countryData = null;
 let timeInterval = null;
 let displayedSong = false;

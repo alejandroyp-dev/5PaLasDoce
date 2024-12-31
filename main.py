@@ -34,7 +34,7 @@ async def obtener_pais(code: str):
     Returns the details of a country based on its code.
     """
     try:
-        country = obtener_datos_pais(code)
+        country = await obtener_datos_pais(code)
         return country
     except Exception as e:
         return {"error": str(e)}
