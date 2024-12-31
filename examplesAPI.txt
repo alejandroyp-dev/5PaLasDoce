@@ -27,7 +27,9 @@ http://127.0.0.1:8000/country/CO
   }
 }
 
-http://127.0.0.1:8000/time/CO
+
+
+http://127.0.0.1:8000/time/Asia/Dhaka    "Asia/Dhaka" time zone, use as query param 
 
 {
   "time": "2024-12-31 12:27:16"
