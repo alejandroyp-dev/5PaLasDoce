@@ -5,7 +5,7 @@ from livereload import Server
 logging.basicConfig(level=logging.DEBUG)
 
 # Ruta al directorio raíz de tu proyecto
-root_path = os.path.join(os.path.dirname(__file__), '..')
+root_path = os.path.dirname(__file__)
 
 # Crear servidor
 server = Server()
