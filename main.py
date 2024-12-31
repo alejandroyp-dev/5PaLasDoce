@@ -39,7 +39,7 @@ async def obtener_pais(code: str):
     except Exception as e:
         return {"error": str(e)}
 
-@app.get("/time/{zone}")
+@app.get("/time")
 async def obtener_hora(zone: str):
     """
     Returns the current time of a country based on its time zone.
@@ -49,7 +49,7 @@ async def obtener_hora(zone: str):
         print(zone)
         print("Main cierre")
         #zone = str(zone)
-        #zone = "Europe/Vienna"
+        #zone = "Asia/Dhaka"
         time = obtener_hora_actual(zone)
         return {"time": time}
     except Exception as e:

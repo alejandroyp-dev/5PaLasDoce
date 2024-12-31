@@ -95,7 +95,7 @@ async function loadCountryData() {
 async function updateCountryTime() {
     try {
         // Fetch the current time using the zone name
-        const timeResponse = await fetch(`${API_URL}/time/${zoneName}`);
+        const timeResponse = await fetch(`${API_URL}/time?zone=${zoneName}`);
         if (!timeResponse.ok) throw new Error('Error getting time');
         
         // Parse the response JSON
