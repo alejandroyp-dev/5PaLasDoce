@@ -1,10 +1,11 @@
 import logging
+import os
 from livereload import Server
 
 logging.basicConfig(level=logging.DEBUG)
 
 # Ruta al directorio raíz de tu proyecto
-root_path = r"C:\Users\Yony\Desktop\TrabajosConPipe\5_Pa_Las_Doce_V3\5PaLasDoce\front-end"
+root_path = os.path.join(os.path.dirname(__file__), '..')
 
 # Crear servidor
 server = Server()

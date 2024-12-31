@@ -1,6 +1,7 @@
 const API_URL = 'https://lrws3dl5-8000.use2.devtunnels.ms';
 let countryData = null;
 let timeInterval = null;
+let displayedSong = false;
 
 // Get country code and zone name from URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -55,9 +56,10 @@ function updateClocks(timeString) {
     const currentMinute = currentTime.getMinutes();
 
     // Check if we reached 23:55
-    if (currentHour === 23 && currentMinute === 55) {
+    if (currentHour == 23 && currentMinute >= 55 && !displayedSong) {
         // Redirect to YouTube video
         window.location.href = 'https://youtu.be/RgbFLWG5wOI?si=OWonlOESWYlO5-Lo';
+        displayedSong = true;
     } else if (hours === 0 && minutes < 5) {
         // Add special style when less than 5 minutes remaining
         document.getElementById('countdown').classList.add('almost-time');
