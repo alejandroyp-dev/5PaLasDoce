@@ -17,29 +17,18 @@ async def obtener_hora_actual(zone: str):
         "zone": zone,  
         "fields": "formatted"  # Customize the fields to display in the response
     }
-    # print(TIMEZONEDB_URL , params)
 
     async with aiohttp.ClientSession() as session:
-        response = await session.get(TIMEZONEDB_TIME_URL, params=params, timeout=15)
+        response = await session.get(TIMEZONEDB_TIME_URL, params=params, timeout=5)
         if response.status == 200:
             try:
                 data = await response.json()
-                # print(f"API Response for zone {zone}: {data}")  # Print the API response for debugging
                 return data.get("formatted", "Could not get the time")
             except (KeyError, TypeError, ValueError) as e:
                 raise Exception(f"Error processing the response: {e}")
+            except Exception as e:
+                raise Exception(e)
             finally:
                 response.close()
         else:
             raise Exception(f"Error getting the time: {response.status}")
-    """
-    if response.status_code == 200:
-        try:
-            data = response.json()
-            print(f"API Response for zone {zone}: {data}")  # Print the API response for debugging
-            return data.get("formatted", "Could not get the time")
-        except (KeyError, TypeError, ValueError) as e:
-            raise Exception(f"Error processing the response: {e}")
-    else:
-        raise Exception(f"Error getting the time: {response.status_code}")
-    """
