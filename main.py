@@ -23,7 +23,7 @@ async def listar_paises():
     Returns the list of available countries with their codes.
     """
     try:
-        countries = obtener_lista_paises()
+        countries = await obtener_lista_paises()
         return countries
     except Exception as e:
         return {"error": str(e)}
@@ -45,12 +45,9 @@ async def obtener_hora(zone: str):
     Returns the current time of a country based on its time zone.
     """
     try:
-        print("Main")
-        print(zone)
-        print("Main cierre")
         #zone = str(zone)
         #zone = "Asia/Dhaka"
-        time = obtener_hora_actual(zone)
+        time = await obtener_hora_actual(zone)
         return {"time": time}
     except Exception as e:
         return {"error": str(e)}

@@ -1,5 +1,5 @@
 // script.js
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'https://lrws3dl5-8000.use2.devtunnels.ms';
 const countrySelect = document.getElementById('countrySelect');
 const loadingMessage = document.getElementById('loadingMessage');
 const errorMessage = document.getElementById('errorMessage');
