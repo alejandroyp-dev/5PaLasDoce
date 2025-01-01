@@ -1,4 +1,3 @@
-import requests
 from decouple import config  # To manage API keys securely
 import aiohttp
 
