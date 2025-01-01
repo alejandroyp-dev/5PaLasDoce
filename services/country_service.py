@@ -1,4 +1,3 @@
-from decouple import config  # To manage API keys securely
 import aiohttp
 
 REST_COUNTRIES_URL = "https://restcountries.com/v3.1/alpha"  # Base URL for the API
