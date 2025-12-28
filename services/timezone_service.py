@@ -1,5 +1,6 @@
 import aiohttp
 from decouple import config
+from datetime import datetime, timezone
 
 TIMEZONEDB_API_KEY = config("TIMEZONE_API_KEY")
 TIMEZONEDB_TIME_URL = "https://api.timezonedb.com/v2.1/get-time-zone"
@@ -11,7 +12,7 @@ async def obtener_hora_actual(zone: str):
         "format": "json",
         "by": "zone",
         "zone": zone,
-        "fields": "timestamp"
+        "fields": "formatted"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -19,7 +20,12 @@ async def obtener_hora_actual(zone: str):
         if response.status == 200:
             try:
                 data = await response.json()
-                return data.get("timestamp")
+                formatted = data.get("formatted")
+                if formatted:
+                    dt = datetime.strptime(formatted, "%Y-%m-%d %H:%M:%S")
+                    dt_utc = dt.replace(tzinfo=timezone.utc)
+                    return dt_utc.timestamp()
+                raise Exception("No formatted time in response")
             except (KeyError, TypeError, ValueError) as e:
                 raise Exception(f"Error processing the response: {e}")
             except Exception as e:

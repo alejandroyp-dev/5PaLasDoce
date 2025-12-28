@@ -74,7 +74,8 @@ function CountryDetails({ testMode = false }) {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
-            hour12: false
+            hour12: false,
+            timeZone: 'UTC'
         });
     };
 
@@ -83,7 +84,8 @@ function CountryDetails({ testMode = false }) {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
-            day: 'numeric'
+            day: 'numeric',
+            timeZone: 'UTC'
         });
     };
 
