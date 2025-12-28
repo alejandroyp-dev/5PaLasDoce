@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { fetchCountry, fetchTime } from '../api';
+import { fetchCountry, fetchTime, fetchTestTime } from '../api';
 import CONFIG from '../config';
 import Footer from '../components/Footer';
 import './CountryDetails.css';
 
-function CountryDetails() {
+function CountryDetails({ testMode = false }) {
     const { code } = useParams();
     const [searchParams] = useSearchParams();
     const zone = searchParams.get('zone');
@@ -18,22 +18,29 @@ function CountryDetails() {
     const redirected = useRef(false);
 
     useEffect(() => {
-        if (!code || !zone) {
+        if (!code) {
             navigate('/');
             return;
         }
 
-        Promise.all([fetchCountry(code), fetchTime(zone)])
+        const timePromise = testMode ? fetchTestTime(30) : fetchTime(zone);
+
+        if (!testMode && !zone) {
+            navigate('/');
+            return;
+        }
+
+        Promise.all([fetchCountry(code), timePromise])
             .then(([countryData, timeData]) => {
                 setCountry(countryData);
-                setCurrentTime(new Date(timeData.time));
+                setCurrentTime(new Date(timeData.time * 1000));
                 setLoading(false);
             })
             .catch(err => {
                 setError(err.message);
                 setLoading(false);
             });
-    }, [code, zone, navigate]);
+    }, [code, zone, navigate, testMode]);
 
     useEffect(() => {
         if (!currentTime) return;
@@ -48,12 +55,15 @@ function CountryDetails() {
     useEffect(() => {
         if (!currentTime || redirected.current) return;
 
-        const hour = currentTime.getHours();
-        const minute = currentTime.getMinutes();
-        const day = currentTime.getDate();
-        const month = currentTime.getMonth();
+        const hour = currentTime.getUTCHours();
+        const minute = currentTime.getUTCMinutes();
+        const day = currentTime.getUTCDate();
+        const month = currentTime.getUTCMonth();
 
-        if (month === 11 && day === 31 && hour === CONFIG.COUNTDOWN_TARGET_HOUR && minute >= CONFIG.COUNTDOWN_TARGET_MINUTE) {
+        const isNewYearsEve = month === 11 && day === 31;
+        const isPastTarget = hour === CONFIG.COUNTDOWN_TARGET_HOUR && minute >= CONFIG.COUNTDOWN_TARGET_MINUTE;
+
+        if (isNewYearsEve && isPastTarget) {
             redirected.current = true;
             window.location.href = CONFIG.NEW_YEAR_VIDEO_URL;
         }
@@ -80,32 +90,34 @@ function CountryDetails() {
     const getCountdown = () => {
         if (!currentTime) return '00:00:00';
 
-        const day = currentTime.getDate();
-        const month = currentTime.getMonth();
-
-        if (month !== 11 || day !== 31) {
-            return '¡Feliz Año Nuevo! 🎉';
-        }
-
-        const target = new Date(currentTime);
-        target.setHours(23, 55, 0, 0);
+        let year = currentTime.getUTCFullYear();
+        let target = new Date(Date.UTC(year, 11, 31, CONFIG.COUNTDOWN_TARGET_HOUR, CONFIG.COUNTDOWN_TARGET_MINUTE, 0, 0));
 
         if (currentTime >= target) {
-            return '¡Es hora! 🎊';
+            const endOfYear = new Date(Date.UTC(year, 11, 31, 23, 59, 59, 999));
+            if (currentTime <= endOfYear) {
+                return '¡Es hora! 🎊';
+            }
+            year++;
+            target = new Date(Date.UTC(year, 11, 31, CONFIG.COUNTDOWN_TARGET_HOUR, CONFIG.COUNTDOWN_TARGET_MINUTE, 0, 0));
         }
 
         const diff = target - currentTime;
-        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
+        if (days > 0) {
+            return `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     };
 
     const isAlmostTime = () => {
         if (!currentTime) return false;
-        const target = new Date(currentTime);
-        target.setHours(23, 55, 0, 0);
+        const year = currentTime.getUTCFullYear();
+        const target = new Date(Date.UTC(year, 11, 31, CONFIG.COUNTDOWN_TARGET_HOUR, CONFIG.COUNTDOWN_TARGET_MINUTE, 0, 0));
         const diff = target - currentTime;
         return diff > 0 && diff < 5 * 60 * 1000;
     };

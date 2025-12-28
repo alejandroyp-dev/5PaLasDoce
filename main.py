@@ -60,6 +60,19 @@ async def obtener_hora(zone: str):
         raise HTTPException(status_code=502, detail=f"Error fetching time: {str(e)}")
 
 
+@app.get("/time/test")
+async def obtener_hora_test(seconds_before: int = 30):
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+    year = now.year
+    target = datetime(year, 12, 31, 23, 55, 0, tzinfo=timezone.utc)
+    if now > target:
+        year += 1
+        target = datetime(year, 12, 31, 23, 55, 0, tzinfo=timezone.utc)
+    simulated = target.timestamp() - seconds_before
+    return {"time": simulated}
+
+
 STATIC_DIR = Path(__file__).parent / "static"
 
 if STATIC_DIR.exists():
@@ -69,6 +82,10 @@ if STATIC_DIR.exists():
 
     @app.get("/country/{code:path}")
     async def serve_country_page(code: str):
+        return FileResponse(STATIC_DIR / "index.html")
+
+    @app.get("/test/{code:path}")
+    async def serve_test_page(code: str):
         return FileResponse(STATIC_DIR / "index.html")
 
     app.mount("/", StaticFiles(directory=STATIC_DIR), name="static")

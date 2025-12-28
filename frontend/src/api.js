@@ -17,3 +17,9 @@ export async function fetchTime(zone) {
     if (!response.ok) throw new Error('Error loading time');
     return response.json();
 }
+
+export async function fetchTestTime(secondsBefore = 30) {
+    const response = await fetch(`${CONFIG.API_URL}/time/test?seconds_before=${secondsBefore}`);
+    if (!response.ok) throw new Error('Error loading test time');
+    return response.json();
+}

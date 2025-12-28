@@ -11,7 +11,7 @@ async def obtener_hora_actual(zone: str):
         "format": "json",
         "by": "zone",
         "zone": zone,
-        "fields": "formatted"
+        "fields": "timestamp"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -19,7 +19,7 @@ async def obtener_hora_actual(zone: str):
         if response.status == 200:
             try:
                 data = await response.json()
-                return data.get("formatted", "Could not get the time")
+                return data.get("timestamp")
             except (KeyError, TypeError, ValueError) as e:
                 raise Exception(f"Error processing the response: {e}")
             except Exception as e:
