@@ -1,0 +1,192 @@
+.country-details {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem;
+}
+
+.country-details.loading-state,
+.country-details.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.details-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.back-btn {
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+    backdrop-filter: blur(10px);
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.details-header h1 {
+    color: #fff;
+    font-size: 2rem;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.details-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .details-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .details-content {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.flag-card,
+.time-card,
+.info-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+}
+
+.flag-card img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.time-card {
+    text-align: center;
+}
+
+.digital-time {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #333;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    letter-spacing: 2px;
+}
+
+.date {
+    color: #666;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    text-transform: capitalize;
+}
+
+.countdown-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.countdown-label {
+    display: block;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.countdown {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #667eea;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.countdown.almost-time {
+    color: #e74c3c;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.info-card h2 {
+    margin: 0 0 1.5rem;
+    color: #333;
+    font-size: 1.3rem;
+}
+
+.info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item .label {
+    color: #666;
+    font-weight: 500;
+}
+
+.info-item .value {
+    color: #333;
+    font-weight: 600;
+    text-align: right;
+}
+
+.error-state button {
+    margin-top: 1rem;
+    padding: 0.75rem 2rem;
+    background: #fff;
+    color: #667eea;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+}
