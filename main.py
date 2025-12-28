@@ -1,6 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from typing import List
+from pathlib import Path
 from services.region_service import obtener_lista_paises
 from services.country_service import obtener_datos_pais
 from services.timezone_service import obtener_hora_actual
@@ -55,3 +58,17 @@ async def obtener_hora(zone: str):
         return {"time": time}
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Error fetching time: {str(e)}")
+
+
+STATIC_DIR = Path(__file__).parent / "static"
+
+if STATIC_DIR.exists():
+    @app.get("/")
+    async def serve_index():
+        return FileResponse(STATIC_DIR / "index.html")
+
+    @app.get("/country/{code:path}")
+    async def serve_country_page(code: str):
+        return FileResponse(STATIC_DIR / "index.html")
+
+    app.mount("/", StaticFiles(directory=STATIC_DIR), name="static")
