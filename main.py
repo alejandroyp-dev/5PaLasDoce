@@ -1,53 +1,57 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from services.region_service import obtener_lista_paises
 from services.country_service import obtener_datos_pais
 from services.timezone_service import obtener_hora_actual
-from models.country_model import Country
+from models.country_model import Country, CountryListItem
 
-app = FastAPI()
+app = FastAPI(
+    title="5PaLasDoce API",
+    description="API para obtener información de países y zonas horarias",
+    version="1.0.0"
+)
 
-# Allow CORS from any origin
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.get("/countries", response_model=List[dict])
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
+
+@app.get("/countries", response_model=List[CountryListItem])
 async def listar_paises():
-    """
-    Returns the list of available countries with their codes.
-    """
     try:
         countries = await obtener_lista_paises()
         return countries
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=502, detail=f"Error fetching countries: {str(e)}")
+
 
 @app.get("/country/{code}", response_model=Country)
 async def obtener_pais(code: str):
-    """
-    Returns the details of a country based on its code.
-    """
+    if not code or len(code) < 2:
+        raise HTTPException(status_code=400, detail="Invalid country code")
     try:
         country = await obtener_datos_pais(code)
         return country
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=404, detail=f"Country not found: {str(e)}")
+
 
 @app.get("/time")
 async def obtener_hora(zone: str):
-    """
-    Returns the current time of a country based on its time zone.
-    """
+    if not zone:
+        raise HTTPException(status_code=400, detail="Zone parameter is required")
     try:
-        #zone = str(zone)
-        #zone = "Asia/Dhaka"
         time = await obtener_hora_actual(zone)
         return {"time": time}
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=502, detail=f"Error fetching time: {str(e)}")

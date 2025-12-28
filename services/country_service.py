@@ -1,11 +1,9 @@
 import aiohttp
 
-REST_COUNTRIES_URL = "https://restcountries.com/v3.1/alpha"  # Base URL for the API
+REST_COUNTRIES_URL = "https://restcountries.com/v3.1/alpha"
+
 
 async def obtener_datos_pais(code: str):
-    """
-    Gets the details of a country based on its code.
-    """
     url = f"{REST_COUNTRIES_URL}/{code}"
 
     async with aiohttp.ClientSession() as session:

@@ -1,23 +1,18 @@
-const API_URL = 'https://1xrgj9gs-8000.use2.devtunnels.ms'; // API URL: hardcoded for missing deployment
 let countryData = null;
 let timeInterval = null;
 let displayedSong = false;
 
-// Get country code and zone name from URL
 const urlParams = new URLSearchParams(window.location.search);
 const countryCode = urlParams.get('country');
 const zoneName = urlParams.get('zoneName');
 
-// Format numbers with thousand separators
 function formatNumber(num) {
     return new Intl.NumberFormat().format(num);
 }
 
-// Update digital clock and countdown
 function updateClocks(timeString) {
     const currentTime = new Date(timeString);
     
-    // Update digital clock
     const timeStr = currentTime.toLocaleTimeString('es-ES', { 
         hour: '2-digit', 
         minute: '2-digit', 
@@ -26,7 +21,6 @@ function updateClocks(timeString) {
     });
     document.getElementById('digitalTime').textContent = timeStr;
     
-    // Update date
     const dateStr = currentTime.toLocaleDateString('es-ES', { 
         weekday: 'long', 
         year: 'numeric', 
@@ -35,7 +29,6 @@ function updateClocks(timeString) {
     });
     document.getElementById('currentDate').textContent = dateStr;
 
-    // Calculate time until 23:55
     const target = new Date(currentTime);
     target.setHours(23, 55, 0, 0);
     if (currentTime >= target) {
@@ -49,7 +42,6 @@ function updateClocks(timeString) {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
     
-    // Update countdown
     document.getElementById('countdown').textContent = 
         `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
@@ -57,31 +49,26 @@ function updateClocks(timeString) {
         document.getElementById('countdown').textContent = `Happy new year! 🎉`;
     }
 
-    // Get current hour and minute
     const currentHour = currentTime.getHours();
     const currentMinute = currentTime.getMinutes();
 
-    // Check if we reached 23:55
-    if (currentHour == 23 && currentMinute >= 55 && !displayedSong) {
-        // Redirect to YouTube video
-        window.location.href = 'https://youtu.be/RgbFLWG5wOI?si=OWonlOESWYlO5-Lo';
+    if (currentHour == CONFIG.COUNTDOWN_TARGET_HOUR && currentMinute >= CONFIG.COUNTDOWN_TARGET_MINUTE && !displayedSong) {
+        window.location.href = CONFIG.NEW_YEAR_VIDEO_URL;
         displayedSong = true;
     } else if (hours === 0 && minutes < 5) {
-        // Add special style when less than 5 minutes remaining
         document.getElementById('countdown').classList.add('almost-time');
     }
 }
 
-// Cargar datos del país
 async function loadCountryData() {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    
     try {
-        // Obtener datos del país
-        const countryResponse = await fetch(`${API_URL}/country/${countryCode}`);
+        const countryResponse = await fetch(`${CONFIG.API_URL}/country/${countryCode}`);
         if (!countryResponse.ok) throw new Error('Error al cargar los datos del país');
         
         countryData = await countryResponse.json();
         
-        // Actualizar la interfaz con los datos del país
         document.getElementById('countryName').textContent = countryData.name;
         document.getElementById('countryFlag').src = countryData.flag;
         document.getElementById('population').textContent = formatNumber(countryData.population);
@@ -89,35 +76,32 @@ async function loadCountryData() {
         document.getElementById('subregion').textContent = countryData.subregion;
         document.getElementById('timezone').textContent = countryData.timezones.join(', ');
         
-        const currencies = Object.entries(countryData.currency)
-            .map(([code, name]) => `${name} (${code})`)
-            .join(', ');
+        const currencies = countryData.currency 
+            ? Object.entries(countryData.currency)
+                .map(([code, name]) => `${name} (${code})`)
+                .join(', ')
+            : 'No disponible';
         document.getElementById('currency').textContent = currencies;
 
-        // Iniciar actualización de hora
+        loadingOverlay.classList.add('hidden');
         updateCountryTime();
         
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al cargar los datos del país');
+        loadingOverlay.classList.add('hidden');
+        document.getElementById('countryName').textContent = 'Error al cargar';
+        alert('Error al cargar los datos del país. Por favor, intente nuevamente.');
     }
 }
 
-// Update country time
 async function updateCountryTime() {
     try {
-        // Fetch the current time using the zone name
-        const timeResponse = await fetch(`${API_URL}/time?zone=${zoneName}`);
+        const timeResponse = await fetch(`${CONFIG.API_URL}/time?zone=${zoneName}`);
         if (!timeResponse.ok) throw new Error('Error getting time');
         
-        // Parse the response JSON
         const timeData = await timeResponse.json();
-        console.log('Time data:', timeData); // Print the API response to the console for debugging
-
-        // Update the clocks with the fetched time
         updateClocks(timeData.time);
 
-        // Update every second
         if (timeInterval) clearInterval(timeInterval);
         timeInterval = setInterval(() => {
             const currentTime = new Date(timeData.time);
@@ -131,7 +115,6 @@ async function updateCountryTime() {
     }
 }
 
-// Initialize page
 if (countryCode && zoneName) {
     loadCountryData();
 } else {

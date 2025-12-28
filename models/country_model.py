@@ -1,6 +1,13 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+
+class CountryListItem(BaseModel):
+    name: str
+    code: str
+    zoneName: str
+
+
 class Country(BaseModel):
     name: str
     flag: str
@@ -8,4 +15,4 @@ class Country(BaseModel):
     region: str
     subregion: str
     timezones: List[str]
-    currency: Optional[dict]  # Puede ser None si no se encuentra información
+    currency: Optional[dict] = None
