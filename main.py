@@ -29,7 +29,7 @@ async def health_check():
     return {"status": "healthy"}
 
 
-@app.get("/countries", response_model=List[CountryListItem])
+@app.get("/api/countries", response_model=List[CountryListItem])
 async def listar_paises():
     try:
         countries = await obtener_lista_paises()
@@ -38,7 +38,7 @@ async def listar_paises():
         raise HTTPException(status_code=502, detail=f"Error fetching countries: {str(e)}")
 
 
-@app.get("/country/{code}", response_model=Country)
+@app.get("/api/country/{code}", response_model=Country)
 async def obtener_pais(code: str):
     if not code or len(code) < 2:
         raise HTTPException(status_code=400, detail="Invalid country code")
@@ -49,7 +49,7 @@ async def obtener_pais(code: str):
         raise HTTPException(status_code=404, detail=f"Country not found: {str(e)}")
 
 
-@app.get("/time")
+@app.get("/api/time")
 async def obtener_hora(zone: str):
     if not zone:
         raise HTTPException(status_code=400, detail="Zone parameter is required")
@@ -60,7 +60,7 @@ async def obtener_hora(zone: str):
         raise HTTPException(status_code=502, detail=f"Error fetching time: {str(e)}")
 
 
-@app.get("/time/test")
+@app.get("/api/time/test")
 async def obtener_hora_test(seconds_before: int = 30):
     from datetime import datetime, timezone
     now = datetime.now(timezone.utc)
